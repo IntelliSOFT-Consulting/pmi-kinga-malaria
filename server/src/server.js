@@ -12,7 +12,7 @@ import cron from 'node-cron';
 
 const app = express();
 const Port = process.env.PORT || 8080;
-const dbUri = process.env.MONGO_URI || 'mongodb://localhost:27017/babel';
+const dbUri = process.env.MONGO_URI;
 
 const corsOptions = {
   origin: '*',
