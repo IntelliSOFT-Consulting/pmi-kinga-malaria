@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    command: ['--auth']
+    volumes:
+      - ./mongo-data:/data/db
+    env_file: ./server/.env
+    restart: always
+
+  reports-server:
+    build: 
+      context: reports-server
+      dockerfile: Dockerfile
+    container_name: server
+    restart: always
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    env_file: ./server/.env
+    ports:
+      - '8080:8080'
+  pmi-frontend:
+    stdin_open: true
+    restart: unless-stopped
+    container_name: pmi-frontend
+    build:
+      dockerfile: Dockerfile
+      context: client
+
+    depends_on:
+      - reports-server
+    ports:
+      - '8000:8000'
