@@ -93,11 +93,11 @@ export const getReports = async (isTest, startDate, endDate) => {
   const indicator = await smsReport(datedReports);
   const countryReport = await country(
     datedReports,
-    totalCounntiesTarget[0].total
+    totalCounntiesTarget[0]?.total
   );
   const countryCummulative = await country(
     allReports,
-    totalCounntiesTarget[0].total
+    totalCounntiesTarget[0]?.total
   );
   const countyReport = await county(datedReports);
   const countyCummulative = await county(allReports);

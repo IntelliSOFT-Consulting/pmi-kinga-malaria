@@ -70,7 +70,8 @@ export const getLastSaturdayDate = () => {
 };
 
 export const filterTestSubmissions = (submissions, isTest) => {
-  return submissions.filter(item => item.test_yn === isTest);
+  let isTesting = isTest === 'yes' ? 'no' : 'yes';
+  return submissions.filter(item => item.test_yn === isTesting);
 };
 
 export const getProjectId = isTest => {
