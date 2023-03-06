@@ -4,10 +4,12 @@ services:
   mongo:
     image: mongo:latest
     container_name: mongo
+    
     volumes:
       - ./mongo-data:/data/db
     env_file: ./server/.env
     restart: always
+    command: ["--auth"]
 
   reports-server:
     build: 
