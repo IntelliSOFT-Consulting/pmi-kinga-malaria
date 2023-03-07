@@ -163,6 +163,7 @@ const smsReport = reports => {
       const {
         county,
         subCounty,
+        ward,
         facility,
         sachets,
         sprayedStructures,
@@ -170,6 +171,7 @@ const smsReport = reports => {
         totalSop,
         date,
       } = report;
+
 
       return {
         'Entered date': date
@@ -180,17 +182,17 @@ const smsReport = reports => {
           'yyyy-MM-dd hh:mm'
         ),
         Country: 'Kenya',
-        'Level 1': county?.name,
-        'Sub-County': subCounty?.name,
-        Ward: facility?.name,
-        'Level 4': '',
+        County: county?.name,
+        'Sub County': subCounty?.name,
+        Ward: ward?.name,
+        'Operation Site': facility?.name,
         'Team Code': '',
         'SOPs Worked': totalSop,
         '# Structures Found': totalStructures,
         '# Structures Sprayed': sprayedStructures,
         '# Insecticide Used': sachets,
-        '# Structures per SOP': methods.getAverage(totalSop, totalStructures),
-        '# Structures per IU': methods.getAverage(sachets, sprayedStructures),
+        '# Structures per SOP': methods.getAverage(totalStructures, totalSop),
+        '# Structures per IU': methods.getAverage(sprayedStructures, sachets),
         'Spray coverage': `${methods.percentage(
           sprayedStructures,
           totalStructures
@@ -212,10 +214,10 @@ const country = (report, target) => {
     );
     const totalSop = methods.getTotalOf(report, 'totalSop');
     const totalSachets = methods.getTotalOf(report, 'sachets');
-    const structuresPerSop = methods.getAverage(totalSop, totalStructures);
+    const structuresPerSop = methods.getAverage(totalStructures, totalSop);
     const structuresPerIU = methods.getAverage(
-      totalSachets,
-      totalSprayedStructures
+      totalSprayedStructures,
+      totalSachets
     );
 
     const cummulativeCoverage = methods.getCummulative(
@@ -262,10 +264,10 @@ const county = reports => {
     );
     const totalSop = methods.getTotalOf(countyReports, 'totalSop');
     const totalSachets = methods.getTotalOf(countyReports, 'sachets');
-    const structuresPerSop = methods.getAverage(totalSop, totalStructures);
+    const structuresPerSop = methods.getAverage(totalStructures, totalSop);
     const structuresPerIU = methods.getAverage(
-      totalSachets,
-      totalSprayedStructures
+      totalSprayedStructures,
+      totalSachets
     );
 
     const target = reports.find(item => item.county.name === report)?.county
@@ -322,18 +324,18 @@ const subCounty = reports => {
     );
     const totalSop = methods.getTotalOf(subCountyReports, 'totalSop');
     const totalSachets = methods.getTotalOf(subCountyReports, 'sachets');
-    const structuresPerSop = methods.getAverage(totalSop, totalStructures);
+    const structuresPerSop = methods.getAverage(totalStructures, totalSop);
     const structuresPerIU = methods.getAverage(
-      totalSachets,
-      totalSprayedStructures
+      totalSprayedStructures,
+      totalSachets
     );
 
     const target = reports.find(item => item.subCounty.name === report)
       ?.subCounty?.target;
 
     const cummulativeCoverage = methods.getCummulative(
-      totalSprayedStructures,
-      totalStructures
+      totalStructures,
+      totalSprayedStructures
     );
 
     const cummulativeProgress = methods.getCummulative(
@@ -365,7 +367,6 @@ const subCounty = reports => {
 const ward = reports => {
   try {
     const uniqueFacilities = methods.uniqueLocations(reports, 'facility');
-    console.log(uniqueFacilities)
     return uniqueFacilities.map(report => {
       const facilityReports = methods.getLocationReport(
         reports,
@@ -382,17 +383,17 @@ const ward = reports => {
       );
       const totalSop = methods.getTotalOf(facilityReports, 'totalSop');
       const totalSachets = methods.getTotalOf(facilityReports, 'sachets');
-      const structuresPerSop = methods.getAverage(totalSop, totalStructures);
+      const structuresPerSop = methods.getAverage(totalStructures, totalSop);
       const structuresPerIU = methods.getAverage(
-        totalSachets,
-        totalSprayedStructures
+        totalSprayedStructures,
+        totalSachets
       );
       const facilityItem = reports.find(item => item.facility?.name === report);
       const target = facilityItem?.facility?.target;
 
       const sprayCoverage = methods.getCummulative(
-        totalSprayedStructures,
-        totalStructures
+        totalStructures,
+        totalSprayedStructures
       );
       const sprayProgress = methods.getCummulative(
         totalSprayedStructures,
@@ -472,7 +473,3 @@ export const latePmtReport = async (
     'Submission Status': 'Incorrect or no PMT data submitted',
   }));
 };
-
-
-
-

@@ -137,7 +137,6 @@ export const getFormSubmissions = async (
             const repeatLink =
               item['inspectors_repeat@odata.navigationLink'] ||
               item.supervisors['inspectors_repeat@odata.navigationLink'];
-            console.log(item['inspectors_repeat@odata.navigationLink'], formId);
             const repeats = await getRepeats(
               token,
               `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.svc/${repeatLink}`
