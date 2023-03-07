@@ -4,8 +4,6 @@ import cors from 'cors';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import routes from './routes';
-// import { updateCounties } from './updateCounties';
-// import importContacts from './importContacts';
 import sendReports from './controllers/sendReportsController';
 import addSchedules from './seed/addSchedules';
 import cron from 'node-cron';

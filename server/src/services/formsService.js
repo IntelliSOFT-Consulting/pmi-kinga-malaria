@@ -67,7 +67,7 @@ export const getFormXlsx = async (isTest, token, formId) => {
   try {
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.xlsx?&%24expand=*`,
+      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.xlsx`,
       {
         headers: {
           Authorization: token,
@@ -101,6 +101,15 @@ const periods = {
   to: new Date(),
 };
 
+const getRepeats = async (token, link) => {
+  const { data } = await axios.get(link, {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return data.value || [];
+};
+
 export const getFormSubmissions = async (
   isTest,
   token,
@@ -112,7 +121,7 @@ export const getFormSubmissions = async (
     period.to = format(new Date(period.to), 'yyyy-MM-dd');
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.svc/Submissions?$filter=__system/submissionDate ge ${period.from}T00:00:00Z and __system/submissionDate le ${period.to}T23:59:59Z&%24expand=*`,
+      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.svc/Submissions?$filter=__system/submissionDate ge ${period.from}T00:00:00Z and __system/submissionDate le ${period.to}T23:59:59Z`,
       {
         headers: {
           Authorization: token,
@@ -120,9 +129,25 @@ export const getFormSubmissions = async (
       }
     );
 
-    const result = data?.value
-      ? data.value?.map(item => flattenObject(item))
-      : [];
+    let result = [];
+    if (data.value) {
+      result = await Promise.all(
+        data.value?.map(async item => {
+          if (item.supervisors) {
+            const repeatLink =
+              item['inspectors_repeat@odata.navigationLink'] ||
+              item.supervisors['inspectors_repeat@odata.navigationLink'];
+            console.log(item['inspectors_repeat@odata.navigationLink'], formId);
+            const repeats = await getRepeats(
+              token,
+              `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.svc/${repeatLink}`
+            );
+            item.inspectors_repeat = repeats;
+          }
+          return flattenObject(item);
+        })
+      );
+    }
     return filterTestSubmissions(result, isTest);
   } catch (error) {
     console.log(error);

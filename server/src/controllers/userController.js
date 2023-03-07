@@ -59,7 +59,6 @@ export const userLogin = async (req, res) => {
   try {
     console.log('logging in...')
     const token = await login(req.body);
-    console.log(token);
     res.status(200).json({ token });
   } catch (error) {
     console.log(error);

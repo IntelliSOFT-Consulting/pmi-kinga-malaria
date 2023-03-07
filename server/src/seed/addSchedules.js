@@ -1,14 +1,15 @@
 import Schedule from '../models/schedules';
+import MailList from '../models/mailList';
 import { updateRecipients } from '../services/scheduleService';
 
-const schedules = [
+const newschedules = [
   {
     report: 'Supervisory Report',
     frequency: 'daily',
     day: '',
     recurring: true,
     time: '20:00',
-    recipients: ['pnyatindo@intellisoftkenya.com'],
+    recipients: [],
   },
   {
     report: 'SMS Reports',
@@ -16,7 +17,7 @@ const schedules = [
     day: '',
     recurring: true,
     time: '20:00',
-    recipients: ['pnyatindo@intellisoftkenya.com'],
+    recipients: [],
   },
   {
     report: 'Submissions By Form',
@@ -24,7 +25,7 @@ const schedules = [
     day: 'Friday',
     recurring: true,
     time: '20:00',
-    recipients: ['pnyatindo@intellisoftkenya.com'],
+    recipients: [],
   },
   {
     report: 'Late PMT',
@@ -32,21 +33,22 @@ const schedules = [
     day: '',
     recurring: true,
     time: '18:00',
-    recipients: ['pnyatindo@intellisoftkenya.com'],
+    recipients: [],
   },
 ];
 
 export default async function addSchedules() {
   try {
-    const schedule = await Schedule.find({});
-    const updatedSchedule = await Promise.all(
-      schedules.map(async schedule => {
-        const { recipients } = schedule;
-        const newRecipients = await updateRecipients(recipients);
-        return { ...schedule, recipients: newRecipients };
-      })
-    );
-    if (schedule.length === 0) {
+   const mailers = await MailList.find();
+   const schedules = await Schedule.find();
+
+   console.log(schedules.length)
+    if (schedules.length === 0) {
+      const updatedSchedule = newschedules.map(schedule => {
+        const recipients = mailers.map(recipient => recipient._id);
+        return { ...schedule, recipients };
+      });
+
       await Schedule.insertMany(updatedSchedule);
     }
   } catch (error) {

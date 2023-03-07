@@ -2,6 +2,7 @@ import { deepFlattenArray } from '../lib/utils';
 import * as auth from './authService';
 import * as formService from './formsService';
 import OrgUnit from '../models/organizationUnits';
+import Inspector from '../models/inspectors';
 
 export const supervisoryReport = async (isTest, token, from, to) => {
   const forms = await formService.getForms(isTest, token);
@@ -35,18 +36,18 @@ const submissionByForm = async (forms, inspectors = [], submissions = []) => {
       const formSubmissions = submissions.filter(item => {
         return (
           item.form === form &&
-          item.inspectors.includes(inspector?.supervisor?.name)
+          item.inspectors.includes(inspector?.name)
         );
       });
       return {
         form,
-        inspector: `${inspector?.name} "${inspector?.supervisor?.name}"`,
+        inspector: `${inspector?.name} "${inspector?.location}"`,
         total: formSubmissions.length,
       };
     });
 
     const data = {};
-    data.User = `${inspector?.name} "${inspector?.supervisor?.name}"`;
+    data.User = `${inspector?.name} "${inspector?.location}"`;
     const total = inspectorSubmissions.reduce((acc, item) => {
       return acc + item.total;
     }, 0);
@@ -81,9 +82,7 @@ export const getSubmissions = async (isTest, token, from, to) => {
   const result = deepFlattenArray(submissions);
   // remove numbering in form name e.g 1. Form Name
   const formNames = forms.map(item => item.name.replace(/^\d+\./, '')?.trim());
-  const inspectors = await OrgUnit.find({ supervisor: { $exists: true } })
-    .select('name supervisor -_id')
-    .populate('supervisor', 'name -_id');
+  const inspectors = await Inspector.find({})
 
   const inspectorSubmissions = await submissionByForm(
     formNames,
