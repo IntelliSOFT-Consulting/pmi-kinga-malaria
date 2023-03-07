@@ -4,10 +4,10 @@ import telerivet from '../config/telerivet';
 import OrganizationUnit from '../models/organizationUnits';
 
 export const createReport = async (req, res) => {
-  const { content, secret, contact } = req.body;
-  const { phone_number } = contact;
 
   try {
+    const { content, secret, contact } = req.body;
+    const { phone_number } = contact;
     if (secret === process.env.TR_SECRET && content?.includes('A.')) {
       const data = content.split('.');
       const totalSop = data[1];
