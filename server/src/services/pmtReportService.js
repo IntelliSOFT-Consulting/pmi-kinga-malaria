@@ -5,6 +5,7 @@ import telerivet from '../config/telerivet';
 import * as templates from '../templates/pmt';
 import { format } from 'date-fns';
 import * as methods from '../lib/utils';
+import Schedule from '../models/schedules';
 
 // save sms report to db
 export const createReport = async body => {
@@ -171,7 +172,6 @@ const smsReport = reports => {
         totalSop,
         date,
       } = report;
-
 
       return {
         'Entered date': date
@@ -431,12 +431,10 @@ export const latePmtReport = async (
     .populate('subCounty', 'name')
     .populate('ward', 'name');
 
-  //  look for organizations which reports.facility.name is not in facilities.name
   const latePmtFacilities = facilities.filter(facility => {
     return !reports.some(report => report.facility.name === facility.name);
   });
 
-  // get all the phone numbers of the supervisors of the late pmt facilities if they exist. Only return the phone numbers of the supervisors that exist
   const latePmtFacilitiesSupervisors = latePmtFacilities
     .map(facility => {
       if (facility.supervisor) {
@@ -447,21 +445,25 @@ export const latePmtReport = async (
 
   const message = `Hello, this is a reminder to submit your daily spray report for today. Thank you`;
 
-  latePmtFacilitiesSupervisors.forEach(async phone => {
-    await telerivet.sendMessage(
-      {
-        content: message,
-        to_number: phone.phone_number,
-      },
-      function (err, message) {
-        if (err) {
-          console.log(err);
-          return res.status(500).send(err);
+  const reportTime = await Schedule.findOne({ report: 'Late PMT' });
+
+  const timeNow = format(new Date(), 'HH:mm');
+  if (reportTime.time === timeNow) {
+    latePmtFacilitiesSupervisors.forEach(async phone => {
+      await telerivet.sendMessage(
+        {
+          content: message,
+          to_number: phone,
+        },
+        function (err, message) {
+          if (err) {
+            console.log(err);
+          }
+          console.log(message);
         }
-        console.log(message);
-      }
-    );
-  });
+      );
+    });
+  }
 
   return latePmtFacilities?.map(facility => ({
     'Missing Report Date': format(new Date(date), 'yyyy-MM-dd'),
