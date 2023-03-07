@@ -18,7 +18,7 @@ export const createReport = async (req, res) => {
       const date = data[6] ? new Date(data[6]) : new Date();
       const test_yn = data[7] === 'yes' ? 'no' : 'yes';
 
-      const location = OrganizationUnit.findOne({ name: facility });
+      const location = await OrganizationUnit.findOne({ name: facility });
 
       const report = new Report({
         user: phone_number,
