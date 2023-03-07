@@ -23,7 +23,7 @@ const AppLayout = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate('/login');
+      location.href = '/login';
     }
   }, [userInfo]);
 

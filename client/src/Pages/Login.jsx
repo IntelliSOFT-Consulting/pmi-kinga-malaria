@@ -12,7 +12,7 @@ export default function Login() {
   useEffect(() => {
     if (userInfo) {
       // go back to the previous page
-      window.history.back();
+      location.href = '/';
     }
   }, [userInfo]);
 
