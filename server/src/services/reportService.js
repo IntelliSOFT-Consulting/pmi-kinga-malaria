@@ -1,27 +1,31 @@
 import { deepFlattenArray } from '../lib/utils';
-import * as auth from './authService';
 import * as formService from './formsService';
-import OrgUnit from '../models/organizationUnits';
 import Inspector from '../models/inspectors';
+import Submission from '../models/submissions';
 
 export const supervisoryReport = async (isTest, token, from, to) => {
   const forms = await formService.getForms(isTest, token);
+
   const actions = await Promise.all(
     forms.map(async formItem => {
       const formId = formItem.xmlFormId;
 
       const formXlsx = await formService.getFormXlsx(isTest, token, formId);
       const form = await formService.convertFormXlsxToJson(formXlsx);
-      const submissions = await formService.getFormSubmissions(
-        isTest,
-        token,
+
+      const submissions = await Submission.find({
         formId,
-        { from, to }
-      );
+        'submission.submissionDate': {
+          $gte: `${from}T00:00:00Z`,
+          $lte: `${to}T23:59:59Z`,
+        },
+      });
+
+      const submissionsList = submissions.map(item => item.submission);
 
       const correctivaActions = await formService.getCorrectiveActions(
         form,
-        submissions,
+        submissionsList,
         formItem.name
       );
       return correctivaActions;
@@ -34,10 +38,7 @@ const submissionByForm = async (forms, inspectors = [], submissions = []) => {
   const inspectorSubmissions = inspectors.map(inspector => {
     const inspectorSubmissions = forms.map(form => {
       const formSubmissions = submissions.filter(item => {
-        return (
-          item.form === form &&
-          item.inspectors.includes(inspector?.name)
-        );
+        return item.form === form && item.inspectors.includes(inspector?.name);
       });
       return {
         form,
@@ -65,24 +66,31 @@ export const getSubmissions = async (isTest, token, from, to) => {
   const submissions = await Promise.all(
     forms.map(async formItem => {
       const formId = formItem.xmlFormId;
-      const submissions = await formService.getFormSubmissions(
-        isTest,
-        token,
+      const allSubmissions = await Submission.find({
         formId,
-        { from, to }
-      );
-      return submissions.map(item => ({
+        'submission.submissionDate': {
+          $gte: `${from}T00:00:00Z`,
+          $lte: `${to}T23:59:59Z`,
+        },
+      });
+      const submissionsList = allSubmissions.map(item => item.submission);
+
+
+      const list =  submissionsList.map(item => ({
         form: formItem.name,
         inspectors: item?.inspectors_repeat?.map(
           item => item.inspectors_other || item.inspectors
         ),
       }));
+      return list;
     })
   );
+
+  console.log(submissions);
   const result = deepFlattenArray(submissions);
   // remove numbering in form name e.g 1. Form Name
   const formNames = forms.map(item => item.name.replace(/^\d+\./, '')?.trim());
-  const inspectors = await Inspector.find({})
+  const inspectors = await Inspector.find({});
 
   const inspectorSubmissions = await submissionByForm(
     formNames,

@@ -7,6 +7,7 @@ import routes from './routes';
 import sendReports from './controllers/sendReportsController';
 import addSchedules from './seed/addSchedules';
 import cron from 'node-cron';
+import { main } from './schedules/submissions';
 
 const app = express();
 const Port = process.env.PORT || 8080;
@@ -44,8 +45,13 @@ cron.schedule('*/1 * * * *', () => {
   sendReports();
 });
 
+// run main after every 2 hours
+cron.schedule('0 */2 * * *', () => {
+  main();
+});
+
 app.listen(Port, () => {
   console.log(`Server is running on port ${Port}`);
 });
 
-addSchedules();
+// addSchedules();

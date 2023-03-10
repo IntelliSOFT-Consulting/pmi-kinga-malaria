@@ -1,5 +1,6 @@
 import { login } from '../services/authService';
 import { supervisoryReport, getSubmissions } from '../services/reportService';
+import { format } from 'date-fns';
 
 const { CENTRAL_EMAIL, CENTRAL_PASSWORD } = process.env;
 
@@ -26,7 +27,16 @@ export const getSubmissionsByForm = async (req, res) => {
     password: CENTRAL_PASSWORD,
   });
   try {
-    const report = await getSubmissions(test_yn, token, from, to);
+    const today = new Date();
+    const lastSaturdayDate = format(
+      new Date(today.setDate(today.getDate() - today.getDay() - 1)),
+      'yyyy-MM-dd'
+    );
+
+    const dateFrom = from || lastSaturdayDate;
+
+    console.log('from', dateFrom);
+    const report = await getSubmissions(test_yn, token, dateFrom, to);
     res.send(report);
   } catch (error) {
     const { status, message } = error;

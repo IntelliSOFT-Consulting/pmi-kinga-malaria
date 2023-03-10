@@ -133,16 +133,6 @@ export const getFormSubmissions = async (
     if (data.value) {
       result = await Promise.all(
         data.value?.map(async item => {
-          if (item.supervisors) {
-            const repeatLink =
-              item['inspectors_repeat@odata.navigationLink'] ||
-              item.supervisors['inspectors_repeat@odata.navigationLink'];
-            const repeats = await getRepeats(
-              token,
-              `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.svc/${repeatLink}`
-            );
-            item.inspectors_repeat = repeats;
-          }
           return flattenObject(item);
         })
       );
@@ -162,6 +152,7 @@ export const getCorrectiveActions = async (
   try {
     const correctiveActions = await submissions
       .map(item => {
+        item = flattenObject(item);
         const keys = Object.keys(item);
         const correctiveAction = keys
           .filter(key => key.includes('_Action'))
@@ -204,6 +195,7 @@ export const getCorrectiveActions = async (
 
     return formattedCorrectiveActions;
   } catch (error) {
+    console.log(error);
     throw new Error({ error: error.message });
   }
 };

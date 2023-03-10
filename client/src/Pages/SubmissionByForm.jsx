@@ -16,7 +16,6 @@ const dateFormat = 'YYYY-MM-DD';
 
 export default function SubmissionByForm() {
   const [dates, setDates] = useState({
-    dateFrom: moment(new Date()).format(dateFormat),
     dateTo: moment(new Date()).format(dateFormat),
   });
   const { submissions, loading } = useSelector(
