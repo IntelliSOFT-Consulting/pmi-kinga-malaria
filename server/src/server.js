@@ -45,7 +45,6 @@ cron.schedule('*/1 * * * *', () => {
   sendReports();
 });
 
-// run main after every 2 hours
 cron.schedule('0 */2 * * *', () => {
   main();
 });

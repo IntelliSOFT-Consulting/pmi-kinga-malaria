@@ -26,7 +26,7 @@ const sendReports = async () => {
   const schedules = await Schedule.find({}).populate('recipients');
   schedules.forEach(async schedule => {
     const { frequency, report, day, time } = schedule;
-    const emails = schedule.recipients.map(item => item.email);
+    const emails = schedule.recipients?.map(item => item.email);
     const now = format(new Date(), 'HH:mm');
     switch (frequency) {
       case 'daily':

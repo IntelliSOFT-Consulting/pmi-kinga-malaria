@@ -432,7 +432,7 @@ export const latePmtReport = async (
     .populate('ward', 'name');
 
   const latePmtFacilities = facilities.filter(facility => {
-    return !reports.some(report => report.facility.name === facility.name);
+    return !reports.some(report => report.facility.name?.trim() === facility.name?.trim());
   });
 
   const latePmtFacilitiesSupervisors = latePmtFacilities

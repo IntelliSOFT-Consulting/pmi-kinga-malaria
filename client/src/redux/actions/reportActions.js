@@ -98,7 +98,7 @@ export const updateReport = datas => async dispatch => {
   dispatch({ type: UPDATE_REPORT_REQUEST });
   try {
     const { data } = await Axios.put(
-      `/api/v1/schedules/schedule/${datas._id}`,
+      `/api/v1/schedules`,
       datas
     );
     dispatch({ type: UPDATE_REPORT_SUCCESS, payload: data });
@@ -127,7 +127,7 @@ export const addRecipient = datas => async dispatch => {
   dispatch({ type: ADD_RECIPIENT_REQUEST });
   try {
     const { data } = await Axios.put(
-      `/api/v1/schedules/recipient/${datas._id}`,
+      `/api/v1/schedules`,
       datas
     );
     dispatch({ type: ADD_RECIPIENT_SUCCESS, payload: data });

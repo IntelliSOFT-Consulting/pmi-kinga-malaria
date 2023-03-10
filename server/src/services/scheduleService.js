@@ -3,7 +3,7 @@ import MailList from '../models/mailList';
 
 export const updateRecipients = async recipients => {
   const newRecipients = await Promise.all(
-    recipients.map(async recipient => {
+    recipients?.map(async recipient => {
       const foundRecipient = await MailList.findOne({ email: recipient });
       if (!foundRecipient) {
         const newRecipient = await MailList.create({ email: recipient });
@@ -49,18 +49,27 @@ export const getScheduleById = async id => {
 };
 
 export const updateSchedule = async schedule => {
-  const { recipients } = schedule;
+  let { recipients } = schedule;
 
-  const newRecipients = await updateRecipients(recipients);
-  const updatedSchedule = await Schedule.findByIdAndUpdate(
+  if (recipients?.length) {
+    const newRecipients = await updateRecipients(recipients);
+    const updatedSchedule = await Schedule.findByIdAndUpdate(
+      schedule._id,
+      { ...schedule, recipients: newRecipients },
+      { new: true }
+    );
+    return updatedSchedule;
+  }
+
+  const scheduleItem = await Schedule.findByIdAndUpdate(
     schedule._id,
-    { ...schedule, recipients: newRecipients },
+    schedule,
     { new: true }
   );
-  return updatedSchedule;
+  return scheduleItem;
 };
 
 export const getMailList = async () => {
   const mailList = await MailList.find();
   return mailList;
-}
+};

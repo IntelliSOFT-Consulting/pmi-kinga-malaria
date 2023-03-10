@@ -35,7 +35,6 @@ export const getSubmissionsByForm = async (req, res) => {
 
     const dateFrom = from || lastSaturdayDate;
 
-    console.log('from', dateFrom);
     const report = await getSubmissions(test_yn, token, dateFrom, to);
     res.send(report);
   } catch (error) {

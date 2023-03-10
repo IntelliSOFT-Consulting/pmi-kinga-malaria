@@ -87,7 +87,7 @@ export const latePmtReport = async (req, res) => {
         $gte: today,
         $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
       },
-    });
+    }).populate('facility');
     const report = reports.length
       ? await pmtReportService.latePmtReport(reports, today)
       : [];

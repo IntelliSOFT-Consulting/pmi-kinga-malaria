@@ -38,17 +38,19 @@ const submissionByForm = async (forms, inspectors = [], submissions = []) => {
   const inspectorSubmissions = inspectors.map(inspector => {
     const inspectorSubmissions = forms.map(form => {
       const formSubmissions = submissions.filter(item => {
-        return item.form === form && item.inspectors.includes(inspector?.name);
+        return (
+          item.form === form && item?.inspectors?.includes(inspector?.name)
+        );
       });
       return {
         form,
-        inspector: `${inspector?.name} "${inspector?.location}"`,
+        inspector: `${inspector?.name} "${inspector?.location?.trim()}"`,
         total: formSubmissions.length,
       };
     });
 
     const data = {};
-    data.User = `${inspector?.name} "${inspector?.location}"`;
+    data.User = `${inspector?.name} "${inspector?.location?.trim()}"`;
     const total = inspectorSubmissions.reduce((acc, item) => {
       return acc + item.total;
     }, 0);
@@ -58,7 +60,7 @@ const submissionByForm = async (forms, inspectors = [], submissions = []) => {
     data['All Forms'] = total;
     return data;
   });
-  return inspectorSubmissions;
+  return inspectorSubmissions?.sort((a, b) => b['All Forms'] - a['All Forms']);
 };
 
 export const getSubmissions = async (isTest, token, from, to) => {
@@ -76,8 +78,8 @@ export const getSubmissions = async (isTest, token, from, to) => {
       const submissionsList = allSubmissions.map(item => item.submission);
 
 
-      const list =  submissionsList.map(item => ({
-        form: formItem.name,
+      const list = submissionsList.map(item => ({
+        form: formItem.name?.replace(/^\d+\./, '')?.trim(),
         inspectors: item?.inspectors_repeat?.map(
           item => item.inspectors_other || item.inspectors
         ),
