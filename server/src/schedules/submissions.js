@@ -12,7 +12,7 @@ const { SERVER_URL, CENTRAL_PROJECT_ID, CENTRAL_EMAIL, CENTRAL_PASSWORD } =
   process.env;
 
 const getFormSubmissions = async formId => {
-  const token = await login();
+  const token = await login({email: CENTRAL_EMAIL, password: CENTRAL_PASSWORD});
   const response = await axios.get(
     `${SERVER_URL}/v1/projects/${CENTRAL_PROJECT_ID}/forms/${formId}.svc/Submissions`,
     {
@@ -25,7 +25,10 @@ const getFormSubmissions = async formId => {
 };
 
 export const main = async () => {
-  const token = await login();
+  const token = await login({
+    email: CENTRAL_EMAIL,
+    password: CENTRAL_PASSWORD,
+  });
   const forms = await getForms('no', token);
 
   forms.forEach(async form => {
