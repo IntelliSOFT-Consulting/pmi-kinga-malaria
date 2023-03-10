@@ -86,7 +86,6 @@ export const getSubmissions = async (isTest, token, from, to) => {
     })
   );
 
-  console.log(submissions);
   const result = deepFlattenArray(submissions);
   // remove numbering in form name e.g 1. Form Name
   const formNames = forms.map(item => item.name.replace(/^\d+\./, '')?.trim());
