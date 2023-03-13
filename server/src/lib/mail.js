@@ -1,28 +1,21 @@
 import { config } from 'dotenv';
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
 config();
-const { MAIL_PASS, EMAIL } = process.env;
 
-const transporter = nodemailer.createTransport({
-  service: 'outlook',
-  auth: {
-    user: EMAIL,
-    pass: MAIL_PASS,
-  },
-});
+sgMail.setApiKey(process.env.EMAIL_PASS);
 
 export default async function sendEmail(to, subject, text, attachments = null) {
   try {
-    let info = await transporter.sendMail({
+    const msg = {
       to,
-      from: `PMI Kinga Malaria <${EMAIL}>`,
+      from: 'PMI Kinga Malaria <mail@pmi-kinga-malaria.org>',
       subject,
       text,
       attachments,
-    });
+    };
 
-    console.log('Message sent: %s', info.messageId);
+    await sgMail.send(msg);
   } catch (error) {
     console.log(error);
     return error;
