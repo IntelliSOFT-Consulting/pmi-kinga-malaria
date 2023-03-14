@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Report from '@/components/Report';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-import { Button, Form, DatePicker, Space } from 'antd';
+import { Button, Form, DatePicker, Select, Space } from 'antd';
 import { CloudDownloadOutlined } from '@ant-design/icons';
 import Loading from '@/components/Loading';
 import { saveAs } from 'file-saver';
@@ -18,6 +18,8 @@ export default function SubmissionByForm() {
   const [dates, setDates] = useState({
     dateTo: moment(new Date()).format(dateFormat),
   });
+  const [county, setCounty] = useState('');
+
   const { submissions, loading } = useSelector(
     state => state.getSubmissionsByForm
   );
@@ -32,6 +34,7 @@ export default function SubmissionByForm() {
       getSubmissionsByForm({
         from: dates.dateFrom,
         to: dates.dateTo,
+        county,
         test_yn: testReport,
       })
     );
@@ -40,16 +43,16 @@ export default function SubmissionByForm() {
   useEffect(() => {
     dispatch(getTest());
     fetchReports();
-  }, [dates]);
+  }, [dates, county]);
 
   const year = new Date().getFullYear();
 
   const handleSubmit = async values => {
-    console.log(values);
     setDates({
       dateFrom: values.date[0].format(dateFormat),
       dateTo: values.date[1].format(dateFormat),
     });
+    setCounty(values.county);
   };
 
   const loadDownload = () => {
@@ -122,6 +125,12 @@ export default function SubmissionByForm() {
               // onChange={handleChange}
               format={dateFormat}
             />
+          </Form.Item>
+          <Form.Item label='County' name='county'>
+            <Select placeholder='Select County' style={{ width: 200 }}>
+              <Option value='Migori'>Migori</Option>
+              <Option value='Homa Bay'>Homa Bay</Option>
+            </Select>
           </Form.Item>
           <Form.Item>
             <Button type='primary' htmlType='submit'>

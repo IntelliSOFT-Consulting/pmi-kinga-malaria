@@ -35,22 +35,30 @@ export const supervisoryReport = async (isTest, token, from, to) => {
 };
 
 const submissionByForm = async (forms, inspectors = [], submissions = []) => {
-  const inspectorSubmissions = inspectors.map(inspector => {
+  
+  const inspectorArray = submissions.map(item => item?.inspectors);
+  const inspectorNames = deepFlattenArray(inspectorArray).filter(
+    (item, index, self) => item && self.indexOf(item) === index
+  );
+
+  const inspectorSubmissions = inspectorNames.map(inspector => {
     const inspectorSubmissions = forms.map(form => {
       const formSubmissions = submissions.filter(item => {
-        return (
-          item.form === form && item?.inspectors?.includes(inspector?.name)
-        );
+        return item.form === form && item?.inspectors?.includes(inspector);
       });
+      const inspectorItem = inspectors.find(item => item.name === inspector);
+      const location = inspectorItem?.location?.trim();
       return {
         form,
-        inspector: `${inspector?.name} "${inspector?.location?.trim()}"`,
+        inspector: `${inspector} ${location ? `"${location}"` : ''}`,
         total: formSubmissions.length,
       };
     });
 
     const data = {};
-    data.User = `${inspector?.name} "${inspector?.location?.trim()}"`;
+    const inspectorItem = inspectors.find(item => item.name === inspector);
+    const location = inspectorItem?.location?.trim();
+    data.User = `${inspector} ${location ? `"${location}"` : ''}`;
     const total = inspectorSubmissions.reduce((acc, item) => {
       return acc + item.total;
     }, 0);
@@ -63,7 +71,7 @@ const submissionByForm = async (forms, inspectors = [], submissions = []) => {
   return inspectorSubmissions?.sort((a, b) => b['All Forms'] - a['All Forms']);
 };
 
-export const getSubmissions = async (isTest, token, from, to) => {
+export const getSubmissions = async (isTest, token, county='', from, to) => {
   const forms = await formService.getForms(isTest, token);
   const submissions = await Promise.all(
     forms.map(async formItem => {
@@ -74,6 +82,7 @@ export const getSubmissions = async (isTest, token, from, to) => {
           $gte: `${from}T00:00:00Z`,
           $lte: `${to}T23:59:59Z`,
         },
+        'submission.county': { $regex: county, $options: 'i' },
       });
       const submissionsList = allSubmissions.map(item => item.submission);
 
@@ -82,14 +91,13 @@ export const getSubmissions = async (isTest, token, from, to) => {
         form: formItem.name?.replace(/^\d+\./, '')?.trim(),
         inspectors: item?.inspectors_repeat?.map(
           item => item.inspectors_other || item.inspectors
-        ),
+        ).filter(item => item),
       }));
       return list;
     })
   );
 
   const result = deepFlattenArray(submissions);
-  // remove numbering in form name e.g 1. Form Name
   const formNames = forms.map(item => item.name.replace(/^\d+\./, '')?.trim());
   const inspectors = await Inspector.find({});
 

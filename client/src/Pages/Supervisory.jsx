@@ -45,7 +45,7 @@ export default function Supervisory() {
   useEffect(() => {
     dispatch(getTest());
     fetchReports();
-  }, [dates]);
+  }, [dates, county]);
 
   const handleSubmit = values => {
     setDates({

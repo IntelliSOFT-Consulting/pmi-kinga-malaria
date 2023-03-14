@@ -21,7 +21,7 @@ export const getSupervisoryReport = async (req, res) => {
 };
 
 export const getSubmissionsByForm = async (req, res) => {
-  const { test_yn = 'no', from, to } = req.query;
+  const { test_yn = 'no', county, from, to } = req.query;
   const token = await login({
     email: CENTRAL_EMAIL,
     password: CENTRAL_PASSWORD,
@@ -35,9 +35,10 @@ export const getSubmissionsByForm = async (req, res) => {
 
     const dateFrom = from || lastSaturdayDate;
 
-    const report = await getSubmissions(test_yn, token, dateFrom, to);
+    const report = await getSubmissions(test_yn, token, county, dateFrom, to);
     res.send(report);
   } catch (error) {
+    console.log(error)
     const { status, message } = error;
     res.status(status || 500).send(message);
   }
