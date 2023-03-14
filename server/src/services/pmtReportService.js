@@ -334,8 +334,8 @@ const subCounty = reports => {
       ?.subCounty?.target;
 
     const cummulativeCoverage = methods.getCummulative(
-      totalStructures,
-      totalSprayedStructures
+      totalSprayedStructures,
+      totalStructures
     );
 
     const cummulativeProgress = methods.getCummulative(
@@ -392,8 +392,8 @@ const ward = reports => {
       const target = facilityItem?.facility?.target;
 
       const sprayCoverage = methods.getCummulative(
-        totalStructures,
-        totalSprayedStructures
+        totalSprayedStructures,
+        totalStructures
       );
       const sprayProgress = methods.getCummulative(
         totalSprayedStructures,
