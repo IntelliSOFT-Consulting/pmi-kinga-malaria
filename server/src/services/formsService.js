@@ -8,6 +8,7 @@ import {
   getProjectId,
 } from '../lib/utils';
 import { format } from 'date-fns';
+import matchCorrectiveAction from '../templates/correctiveActions';
 
 config();
 
@@ -168,6 +169,7 @@ export const getCorrectiveActions = async (
             'yyyy-MM-dd HH:mm a'
           ),
           'Form name': formName,
+          'County': item.county_other || item.county,
           'Sub-County': item.sub_county_other || item.sub_county,
           Ward: item.ward_other || item.ward,
           'Operations Site': item.operations_site_other || item.operations_site,
@@ -185,11 +187,12 @@ export const getCorrectiveActions = async (
         field => field.name === actionQuestion?.relevant?.match(/\${(.*?)}/)[1]
       );
       delete key.key;
+      const matched = matchCorrectiveAction(actionQuestion?.hint);
       return {
         ...key,
         'Form question': question?.label,
         'Red flag warning': actionQuestion?.hint,
-        'Responsible for resolution': 'County Coordinator',
+        'Responsible for resolution': matched?.responsible || 'County Coordinator',
       };
     });
 

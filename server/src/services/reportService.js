@@ -3,7 +3,7 @@ import * as formService from './formsService';
 import Inspector from '../models/inspectors';
 import Submission from '../models/submissions';
 
-export const supervisoryReport = async (isTest, token, from, to) => {
+export const supervisoryReport = async (isTest, token, from, to, county='') => {
   const forms = await formService.getForms(isTest, token);
 
   const actions = await Promise.all(
@@ -19,6 +19,7 @@ export const supervisoryReport = async (isTest, token, from, to) => {
           $gte: `${from}T00:00:00Z`,
           $lte: `${to}T23:59:59Z`,
         },
+        'submission.county': { $regex: county, $options: 'i' },
       });
 
       const submissionsList = submissions.map(item => item.submission);
