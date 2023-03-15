@@ -44,12 +44,11 @@ export const supervisoryEmail = async recipients => {
 
     const attachments = [createAttachment(xlsx, 'supervisory_report')];
 
-    await sendEmail(
-      recipients,
-      'Supervisory Report',
-      'Supervisory Report',
-      attachments
-    );
+    const body = `Please find attached the Supervisory Report for ${format(
+      new Date(),
+      'yyyy-MM-dd'
+    )}`;
+    await sendEmail(recipients, 'Supervisory Report', body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -77,7 +76,9 @@ export const latePmtEmail = async recipients => {
 
     const attachments = [createAttachment(xlsx, 'late_pmt')];
 
-    await sendEmail(recipients, 'Late PMT', 'Late PMT', attachments);
+    const body = `Please find attached the Late PMT report for ${today}`;
+
+    await sendEmail(recipients, 'Late PMT', body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -136,12 +137,20 @@ export const submissionByFormEmail = async recipients => {
 
     const attachments = [createAttachment(xlsx, 'submission_by_form')];
 
-    await sendEmail(
-      recipients,
-      'Submission By Form',
-      'Submission By Form',
-      attachments
-    );
+    // get the date of the last closest Monday without knowing the day of the week(it may be Sunday or Monday, or whichever day today)
+    const lastMonday = () => {
+      const today = new Date();
+      const day = today.getDay();
+      const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+      return new Date(today.setDate(diff));
+    };
+
+    const body = `Please find attached the Submissions By Form report for ${format(
+      lastMonday(),
+      'yyyy-MM-dd'
+    )} to ${format(new Date(), 'yyyy-MM-dd')}`;
+
+    await sendEmail(recipients, 'Submission By Form', body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -171,8 +180,12 @@ export const smsIndicatorEmail = async recipients => {
     });
 
     const attachments = [createAttachment(xlsxBase64, 'sms_indicator')];
+    const body = `Please find attached the Spray Progress Report for ${format(
+      new Date(),
+      'yyyy-MM-dd'
+    )}`;
 
-    await sendEmail(recipients, 'SMS Indicator', 'SMS Indicator', attachments);
+    await sendEmail(recipients, 'SMS Indicator', body, attachments);
   } catch (error) {
     console.log(error);
   }
