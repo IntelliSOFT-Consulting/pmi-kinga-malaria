@@ -48,7 +48,9 @@ export const supervisoryEmail = async recipients => {
       new Date(),
       'yyyy-MM-dd'
     )}`;
-    await sendEmail(recipients, 'Supervisory Report', body, attachments);
+
+    const title = `Supervisory Report for ${format(new Date(), 'yyyy-MM-dd')}`;
+    await sendEmail(recipients, title, body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -78,7 +80,9 @@ export const latePmtEmail = async recipients => {
 
     const body = `Please find attached the Late PMT report for ${today}`;
 
-    await sendEmail(recipients, 'Late PMT', body, attachments);
+    const title = `Late PMT Report for ${today}`;
+
+    await sendEmail(recipients, title, body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -108,7 +112,14 @@ export const pmtEmail = async recipients => {
 
     const attachments = [createAttachment(xlsx, 'pmt')];
 
-    await sendEmail(recipients, 'PMT', 'PMT', attachments);
+    const body = `Please find attached the PMT report for ${format(
+      new Date(),
+      'yyyy-MM-dd'
+    )}`;
+
+    const title = `PMT Report for ${format(new Date(), 'yyyy-MM-dd')}`;
+
+    await sendEmail(recipients, title, body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -150,7 +161,12 @@ export const submissionByFormEmail = async recipients => {
       'yyyy-MM-dd'
     )} to ${format(new Date(), 'yyyy-MM-dd')}`;
 
-    await sendEmail(recipients, 'Submission By Form', body, attachments);
+    const title = `Submissions By Form Report for ${format(
+      lastMonday(),
+      'yyyy-MM-dd'
+    )} to ${format(new Date(), 'yyyy-MM-dd')}`;
+
+    await sendEmail(recipients, title, body, attachments);
   } catch (error) {
     console.log(error);
   }
@@ -184,8 +200,12 @@ export const smsIndicatorEmail = async recipients => {
       new Date(),
       'yyyy-MM-dd'
     )}`;
+    const title = `SMS Indicator Report for ${format(
+      new Date(),
+      'yyyy-MM-dd'
+    )}`;
 
-    await sendEmail(recipients, 'SMS Indicator', body, attachments);
+    await sendEmail(recipients, title, body, attachments);
   } catch (error) {
     console.log(error);
   }
