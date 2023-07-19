@@ -12,21 +12,27 @@ This is a reports web app for the PMI Kinga Malaria Project
 
 #### Server
 
+
 1. Navigate into the server directory from your terminal
 
-   ```
-   cd server
-   ```
-2. Install dependencies
+```
+cd server
+```
 
-   ```
+
+2. Create a `.env` file in the server directory and add the variables as given in the `.env-example` file
+
+3. Install dependencies
+
+```
    npm install
-   ```
-3. Run the app
+```
 
-   ```
-   npm start
-   ```
+4. Run the app
+
+```
+npm start
+```
 
 #### Client
 
