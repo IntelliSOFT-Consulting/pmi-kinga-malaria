@@ -49,7 +49,7 @@ npm start
 3. Run the app
 
    ```
-   npm start
+   npm run dev
    ```
 
 The app will then be accessed in your browser on `http://localhost:3000`
