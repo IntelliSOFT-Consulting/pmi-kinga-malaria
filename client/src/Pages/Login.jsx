@@ -26,6 +26,7 @@ export default function Login() {
       <div className='login-section'>
         <div className='login-form'>
           <h1>Login</h1>
+          <p>Please enter your email and password <br /> to <b>Access</b> your account.</p>
           <Form onFinish={onFinish}>
             <Form.Item
               rules={[
@@ -34,7 +35,7 @@ export default function Login() {
               ]}
               name='email'
             >
-              <Input size='large' placeholder='Email' />
+              <Input size='large' placeholder='Email Address' className='email-input' />
             </Form.Item>
             <Form.Item
               rules={[
@@ -42,10 +43,13 @@ export default function Login() {
               ]}
               name='password'
             >
-              <Input.Password size='large' placeholder='Password' />
+              <Input.Password size='large' placeholder='***********' className='password-input' />
             </Form.Item>
+            <div className='forgot-password'>
+              <a href="">Forgot your password?</a>
+            </div>
             <Form.Item>
-              <Button type='primary' htmlType='submit'>
+              <Button type='' htmlType='submit' className='login-button'>
                 Login
               </Button>
             </Form.Item>
