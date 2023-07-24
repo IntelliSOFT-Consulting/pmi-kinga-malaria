@@ -41,7 +41,7 @@ const AppLayout = () => {
         <div className='label'>
           <span id='page-back-title'>
             <Link to='/' className='pmi-logo'>
-              PMI Kinga Malaria
+              PMI KINGA MALARIA
             </Link>
           </span>
           {pathname !== '/' && <Link to='/'> Back</Link>}
