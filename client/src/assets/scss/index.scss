@@ -52,6 +52,7 @@ main {
   }
 }
 .site-layout {
+  background-color: #fff;
   min-height: calc(100vh - 165px);
   .site-layout-background {
     padding: 24px;
@@ -101,13 +102,46 @@ main {
 .reports-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
+  grid-gap: 50px;
+  padding: 10px 20px;
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 576px) {
     grid-template-columns: repeat(1, 1fr);
+  }
+  .ant-card-bordered {
+    border: 1px solid #a3a3a3;
+    background-color: #fafafa;
+    line-height: 50px;
+    .ant-card-meta-title {
+      font-size: 25px;
+    }
+    .ant-card-meta-description {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .ant-card-actions {
+      border-top: 1px solid #a3a3a3;
+      background-color: #fafafa;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+        > li {
+          border-right: 1px solid #a3a3a3;
+          height: 100%;
+          padding: 18px 0;
+        }
+        > li:last-child {
+          border-right: none;
+        }
+      svg {
+        width: 23px;
+        height: 23px;
+      }
+    }
   }
 }
 
