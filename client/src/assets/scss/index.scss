@@ -104,11 +104,11 @@ main {
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 50px;
   padding: 10px 20px;
-  @media (min-width: 769px) and (max-width: 1600px) {
+  @media (min-width: 836px) and (max-width: 1600px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 835px) {
     grid-template-columns: repeat(1, 1fr);
   }
   .ant-card-bordered {
