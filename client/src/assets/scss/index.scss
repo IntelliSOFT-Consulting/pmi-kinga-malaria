@@ -103,7 +103,7 @@ main {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 50px;
-  padding: 10px 20px;
+  padding: 10px 5px;
   @media (min-width: 836px) and (max-width: 1600px) {
     grid-template-columns: repeat(2, 1fr);
   }
