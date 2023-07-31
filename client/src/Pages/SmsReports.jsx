@@ -53,6 +53,7 @@ export default function SmsReports() {
 
   return (
     <div className='table-view'>
+      <h1 className='reports-header'>KINGA MALARIA - SMS REPORTS</h1>
       <Space direction='horizontal' className='table-filters filter-report'>
         <Form
           layout='inline'
