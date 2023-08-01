@@ -33,10 +33,32 @@ main {
 .ant-table-thead {
   tr {
     th {
-      background-color: #dddddd !important;
+      padding: 18px !important;
+      text-align: center;
+      background-color: #fafafa !important;
       color: black;
       font-weight: bold;
       font-size: 12px;
+      border: 1px solid #cccccc;
+      &:not(:last-child) {
+        border-right: none;
+      }
+    }
+  }
+}
+.ant-table-tbody {
+  tr {
+    td {
+      text-align: center;
+      background-color: #fff !important;
+      font-size: 12px;
+      border-left: 1px solid #cccccc;
+      border-bottom: 1px solid #cccccc;
+      
+      border-right: 1px solid #cccccc;
+      &:not(:last-child) {
+        border-right: none;
+      }
     }
   }
 }
@@ -71,6 +93,9 @@ main {
   max-width: 100%;
   > div {
     overflow-x: auto;
+  }
+  .reports-header {
+    color: #cc143f;
   }
 }
 
@@ -159,6 +184,15 @@ main {
 }
 .ant-form-item-row {
   display: block;
+  button {
+    border-radius: 5px;
+    height: 40px;
+    padding: 0 30px;
+
+    @media (min-width: 969px) and (max-width: 1079px) {
+      margin-top: 10px;
+    }
+  }
 }
 .report-filter {
   align-items: flex-end;
@@ -182,10 +216,22 @@ main {
       margin-top: 1rem;
     }
   }
-  // .date-filter {
+  .ant-picker, .ant-select, .ant-select-selector{
+    background-color: #fff !important;
+    height: 40px !important;
+    border-radius: 10px !important;
+  }
+  .ant-picker, .ant-select {
+    box-shadow: 0 5px 12px -2px rgba(0, 0, 255, 0.1);
+  }
+  .ant-select-selection-placeholder, .ant-select-selection-item {
+    margin-top: 4px;
+  }
+  .date-filter {
   //   width: calc(100% - 120px);
+    width: 340px;
 
-  // }
+  }
 }
 
 .empty {
@@ -315,6 +361,10 @@ main {
   > div {
     > button {
       margin-bottom: 1rem;
+      border-radius: 5px;
+      height: 40px;
+      padding: 0 17px;
+      background-color: #f7f7f7;
     }
   }
 }
@@ -354,5 +404,40 @@ main {
   svg {
     cursor: pointer;
     fill: #02097e;
+  }
+}
+
+.ant-pagination {
+  .ant-pagination-item {
+    border-color: #000 !important;
+    a {
+      color: #000 !important;
+    }
+  }
+  .ant-pagination-item-active {
+    border-color: transparent !important;
+    background-color: #009ac4;
+    a {
+      color: #fff !important;
+    }
+  }
+}
+
+.ant-tabs-nav {
+  background-color: #fafafa;
+  .ant-tabs-nav-list{
+    .ant-tabs-tab {
+      padding: 12px 10px;
+    }
+    .ant-tabs-tab-active {
+      background-color: #ffe7e6;
+      transition: background-color 0.3s ease;
+      .ant-tabs-tab-btn {
+        color: #000 !important;
+      }
+    }
+    .ant-tabs-ink-bar {
+      height: 5px !important;
+    }
   }
 }

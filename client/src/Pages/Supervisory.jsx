@@ -86,6 +86,7 @@ export default function Supervisory() {
 
   return (
     <div className='table-view'>
+      <h1 className='reports-header'>KINGA MALARIA - SUPERVISORY REPORTS</h1>
       <Space direction='horizontal' className='table-filters filter-report'>
         <Form
           layout='inline'
@@ -102,7 +103,7 @@ export default function Supervisory() {
             />
           </Form.Item>
           <Form.Item label='County' name='county'>
-            <Select placeholder='Select County' style={{ width: 200 }}>
+            <Select placeholder='Select County' style={{ width: 340 }}>
               <Option value='Migori'>Migori</Option>
               <Option value='Homa Bay'>Homa Bay</Option>
             </Select>

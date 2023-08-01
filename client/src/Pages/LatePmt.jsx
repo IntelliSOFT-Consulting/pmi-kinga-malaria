@@ -57,6 +57,7 @@ export default function LatePmt() {
   });
   return (
     <div className='table-view'>
+      <h1 className='reports-header'>KINGA MALARIA - LATE PMT REPORTS</h1>
       <Space direction='horizontal' className='table-filters filter-report'>
         <Form
           layout='inline'
