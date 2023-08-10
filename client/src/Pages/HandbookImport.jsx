@@ -11,11 +11,9 @@ export default function HandbookImport() {
     const file = files[0];
 
     // Check if the file is an Excel file (xlsx)
-    if (
-      file.type === "application/vnd.ms-excel" ||
-      file.type ===
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    ) {
+    const isExcelFile = file.name.endsWith(".xlsx");
+
+    if (isExcelFile) {
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.load(await file.arrayBuffer());
 
