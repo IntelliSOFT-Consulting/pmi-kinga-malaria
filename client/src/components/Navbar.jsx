@@ -29,7 +29,11 @@ export default function Navbar() {
     {
       path: '/users',
       label: 'Users',
-    }
+    },
+    {
+      path: '/handbook',
+      label: 'Handbook Import',
+    },
   ];
 
   const handleToggle = () => {
