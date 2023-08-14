@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { Button, Table, message } from "antd";
+import { Button, Table, message, Select, Space } from "antd";
 import { CloudUploadOutlined } from "@ant-design/icons";
 import ExcelJS from "exceljs";
 
+const { Option } = Select;
+
 export default function HandbookImport() {
   const [tableData, setTableData] = useState([]);
+  const [selectedSheet, setSelectedSheet] = useState(null);
+  const [selectedSheetOptions, setSelectedSheetOptions] = useState([]);
+  const [workbook, setWorkbook] = useState(null);
 
   const handleImport = async (e) => {
     const { files } = e.target;
@@ -14,21 +19,35 @@ export default function HandbookImport() {
     const isExcelFile = file.name.endsWith(".xlsx");
 
     if (isExcelFile) {
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.load(await file.arrayBuffer());
+      const newWorkbook = new ExcelJS.Workbook();
+      await newWorkbook.xlsx.load(await file.arrayBuffer());
 
-      // Reading from a specific sheet
-      const sheet = workbook.getWorksheet(9);
+      const sheetOptions = newWorkbook.worksheets.map((sheet, index) => ({
+        label: sheet.name,
+        value: index,
+      }));
 
-      const sheetData = [];
-      sheet.eachRow((row) => {
-        sheetData.push(row.values);
-      });
-
-      setTableData(sheetData);
+      setSelectedSheet(null);
+      setTableData([]);
+      setSelectedSheetOptions(sheetOptions);
+      setWorkbook(newWorkbook);
       message.success("Handbook import successful");
     } else {
       message.error("Invalid file format. Please upload an Excel file.");
+    }
+  };
+
+  const handleSheetChange = (value) => {
+    setSelectedSheet(value);
+
+    if (workbook) {
+      const selectedWorksheet = workbook.worksheets[value];
+      const sheetData = [];
+      selectedWorksheet.eachRow((row) => {
+        sheetData.push(row.values);
+      });
+
+      setTableData(sheetData.slice(1));
     }
   };
 
@@ -43,14 +62,29 @@ export default function HandbookImport() {
 
   return (
     <div>
-      <div className="facility-import">
-        <Button type="primary" icon={<CloudUploadOutlined />}>
-          Import Handbook
-        </Button>
-        <input onChange={handleImport} type="file" accept=".xlsx" />
-      </div>
+      <Space direction="horizontal">
+        <div className="facility-import">
+          <Button type="primary" icon={<CloudUploadOutlined />}>
+            Import Handbook
+          </Button>
+          <input onChange={handleImport} type="file" accept=".xlsx" />
+        </div>
+        {selectedSheetOptions.length > 0 && (
+          <Select
+            placeholder="Select a sheet"
+            onChange={handleSheetChange}
+            value={selectedSheet}
+          >
+            {selectedSheetOptions.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
+        )}
+      </Space>
       <Table
-        dataSource={tableData.slice(1)}
+        dataSource={tableData}
         columns={columns}
         size="small"
         pagination={{
