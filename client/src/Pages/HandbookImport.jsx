@@ -6,10 +6,10 @@ import ExcelJS from "exceljs";
 const { Option } = Select;
 
 export default function HandbookImport() {
-  const [tableData, setTableData] = useState([]); // store data from the selected sheet
-  const [selectedSheet, setSelectedSheet] = useState(null); // store the index of the selected sheet
-  const [selectedSheetOptions, setSelectedSheetOptions] = useState([]); // store the options for the sheet select dropdown
-  const [workbook, setWorkbook] = useState(null); // store the loaded Excel workbook
+  const [tableData, setTableData] = useState([]);
+  const [selectedSheet, setSelectedSheet] = useState(null);
+  const [selectedSheetOptions, setSelectedSheetOptions] = useState([]);
+  const [workbook, setWorkbook] = useState(null);
 
   const handleImport = async (e) => {
     const { files } = e.target;
