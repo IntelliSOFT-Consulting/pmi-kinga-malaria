@@ -61,7 +61,7 @@ export default function HandbookImport() {
       : [];
 
   return (
-    <div>
+    <div className="table-view">
       <Space direction="horizontal">
         <div className="facility-import">
           <Button type="primary" icon={<CloudUploadOutlined />}>
