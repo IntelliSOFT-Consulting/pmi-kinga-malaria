@@ -5,6 +5,7 @@ import SubmissionByForm from '@/Pages/SubmissionByForm';
 import LatePmt from '@/Pages/LatePmt';
 import SmsReports from '@/Pages/SmsReports';
 import Users from '@/Pages/Users';
+import HandbookImport from '@/Pages/HandbookImport';
 
 const routes = [
   {
@@ -34,6 +35,10 @@ const routes = [
   {
     path: '/users',
     element: <Users />,
+  },
+  {
+    path: '/handbook',
+    element: <HandbookImport />,
   },
 ];
 
