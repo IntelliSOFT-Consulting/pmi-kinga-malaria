@@ -16,7 +16,7 @@ export const getForms = async (isTest, token) => {
   try {
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms`,
+      `${process.env.SERVER_URL}/v1/projects/1/forms`,
       {
         headers: {
           Authorization: token,
@@ -33,7 +33,7 @@ export const getForm = async (isTest, token, formId) => {
   try {
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.xlsx`,
+      `${process.env.SERVER_URL}/v1/projects/1/forms/${formId}.xlsx`,
       {
         headers: {
           Authorization: token,
@@ -51,7 +51,7 @@ export const getFormSchema = async (isTest, token, formId) => {
   try {
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}/fields`,
+      `${process.env.SERVER_URL}/v1/projects/1/forms/${formId}/fields`,
       {
         headers: {
           Authorization: token,
@@ -68,7 +68,7 @@ export const getFormXlsx = async (isTest, token, formId) => {
   try {
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.xlsx`,
+      `${process.env.SERVER_URL}/v1/projects/1/forms/${formId}.xlsx`,
       {
         headers: {
           Authorization: token,
@@ -122,7 +122,7 @@ export const getFormSubmissions = async (
     period.to = format(new Date(period.to), 'yyyy-MM-dd');
     const projectId = getProjectId(isTest);
     const { data } = await axios.get(
-      `${process.env.SERVER_URL}/v1/projects/${projectId}/forms/${formId}.svc/Submissions?$filter=__system/submissionDate ge ${period.from}T00:00:00Z and __system/submissionDate le ${period.to}T23:59:59Z`,
+      `${process.env.SERVER_URL}/v1/projects/1/forms/${formId}.svc/Submissions?$filter=__system/submissionDate ge ${period.from}T00:00:00Z and __system/submissionDate le ${period.to}T23:59:59Z`,
       {
         headers: {
           Authorization: token,

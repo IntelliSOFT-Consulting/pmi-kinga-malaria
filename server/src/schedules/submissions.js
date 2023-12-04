@@ -1,4 +1,4 @@
-import fs from 'fs';
+
 import axios from 'axios';
 import { config } from 'dotenv';
 import Submission from '../models/submissions';
@@ -8,13 +8,14 @@ import { getForms } from '../services/formsService';
 
 config();
 
-const { SERVER_URL, CENTRAL_PROJECT_ID, CENTRAL_EMAIL, CENTRAL_PASSWORD } =
+const { SERVER_URL, CENTRAL_PROJECT_TEST_ID, CENTRAL_EMAIL, CENTRAL_PASSWORD } =
   process.env;
 
 const getFormSubmissions = async formId => {
   const token = await login({email: CENTRAL_EMAIL, password: CENTRAL_PASSWORD});
+  console.log('Getting submissions...', CENTRAL_PROJECT_TEST_ID, formId)
   const response = await axios.get(
-    `${SERVER_URL}/v1/projects/${CENTRAL_PROJECT_ID}/forms/${formId}.svc/Submissions`,
+    `${SERVER_URL}/v1/projects/1/forms/${formId}.svc/Submissions`,
     {
       headers: {
         Authorization: token,
@@ -53,7 +54,7 @@ const populateSupervisors = async (token, form) => {
             submissions[count]?.['inspectors_repeat@odata.navigationLink'];
 
           if (inspectors) {
-            const profileUrl = `${SERVER_URL}/v1/projects/${CENTRAL_PROJECT_ID}/forms/${formId}.svc/${inspectors}`;
+            const profileUrl = `${SERVER_URL}/v1/projects/1/forms/${formId}.svc/${inspectors}`;
             const profileDetails = await getSupervisors(token, profileUrl);
 
             if (submissions[count]) {
