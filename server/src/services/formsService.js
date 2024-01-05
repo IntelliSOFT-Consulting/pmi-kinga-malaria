@@ -25,7 +25,8 @@ export const getForms = async (isTest, token) => {
     );
     return data;
   } catch (error) {
-    throw new Error({ error: error.message });
+    console.log(error);
+    // throw new Error({ error: error.message });
   }
 };
 
