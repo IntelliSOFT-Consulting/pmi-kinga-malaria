@@ -45,9 +45,10 @@ cron.schedule('*/1 * * * *', () => {
   sendReports();
 });
 
-main();
-// cron.schedule('0 */2 * * *', () => {
-// });
+
+cron.schedule('0 */2 * * *', () => {
+  main();
+});
 
 app.listen(Port, () => {
   console.log(`Server is running on port ${Port}`);
