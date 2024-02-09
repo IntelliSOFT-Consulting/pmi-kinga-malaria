@@ -42,7 +42,6 @@ export default async function addSchedules() {
     const mailers = await MailList.find();
     const schedules = await Schedule.find();
 
-    console.log(schedules.length);
     if (schedules.length === 0) {
       const updatedSchedule = newschedules.map((schedule) => {
         const recipients = mailers.map((recipient) => recipient._id);

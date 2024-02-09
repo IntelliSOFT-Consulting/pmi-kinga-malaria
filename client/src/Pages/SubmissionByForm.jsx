@@ -131,6 +131,7 @@ export default function SubmissionByForm() {
             <Select placeholder='Select County' style={{ width: 340 }}>
               <Option value='Migori'>Migori</Option>
               <Option value='Homa Bay'>Homa Bay</Option>
+              <Option value='Busia'>Busia</Option>
             </Select>
           </Form.Item>
           <Form.Item>
