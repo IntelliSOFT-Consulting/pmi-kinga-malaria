@@ -75,7 +75,7 @@ export const addUser = datas => async dispatch => {
 export const importUsers = datas => async dispatch => {
   dispatch({ type: IMPORT_USERS_REQUEST });
   try {
-    const { data } = await Axios.post('/api/v1/users/import', { users: datas });
+    const { data } = await Axios.post('/api/v1/users/import', datas);
     dispatch({ type: IMPORT_USERS_SUCCESS, payload: data });
     message.success('Users imported successfully');
   } catch (error) {
