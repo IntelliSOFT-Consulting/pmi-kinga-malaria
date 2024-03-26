@@ -66,19 +66,15 @@ export default function SubmissionByForm() {
     },
     {
       label: "County",
-      value: "County",
+      value: "county",
     },
     {
       label: "Sub-County",
-      value: "SubCounty",
-    },
-    {
-      label: "Ward",
-      value: "Ward",
+      value: "subCounty",
     },
     {
       label: "Operations Site",
-      value: "Operations Site",
+      value: "site",
     },
     {
       label: `PMI Kinga Malaria ${year} > IRS Application > Welcome to PMI Kinga Malaria`,

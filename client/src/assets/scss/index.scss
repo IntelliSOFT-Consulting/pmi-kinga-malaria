@@ -26,6 +26,7 @@ main {
   background-color: #eee !important;
 }
 .ant-table {
+  margin-top: 1rem;
   td {
     font-size: 14px;
   }
@@ -33,7 +34,6 @@ main {
 .ant-table-thead {
   tr {
     th {
-      padding: 18px !important;
       text-align: center;
       background-color: #fafafa !important;
       color: black;
@@ -54,7 +54,6 @@ main {
       font-size: 12px;
       border-left: 1px solid #cccccc;
       border-bottom: 1px solid #cccccc;
-      
       border-right: 1px solid #cccccc;
       &:not(:last-child) {
         border-right: none;
@@ -397,31 +396,6 @@ main {
   }
 }
 
-
-.editable-cell {
-  display: flex;
-  justify-content: space-between;
-  svg {
-    cursor: pointer;
-    fill: #02097e;
-  }
-}
-
-.ant-pagination {
-  .ant-pagination-item {
-    border-color: #000 !important;
-    a {
-      color: #000 !important;
-    }
-  }
-  .ant-pagination-item-active {
-    border-color: transparent !important;
-    background-color: #009ac4;
-    a {
-      color: #fff !important;
-    }
-  }
-}
 
 .ant-tabs-nav {
   background-color: #fafafa;
