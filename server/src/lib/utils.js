@@ -3,6 +3,8 @@ import { config } from 'dotenv';
 config();
 
 export const flattenObject = obj => {
+  if (!obj) return {};
+  if (typeof obj !== 'object') return obj;
   return Object.keys(obj).reduce((acc, key) => {
     if (
       typeof obj[key] === 'object' &&

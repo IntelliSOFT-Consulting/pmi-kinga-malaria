@@ -10,8 +10,8 @@ services:
     env_file: ./server/.env
     restart: always
     command: ["--auth"]
-    ports:
-      - '27017:27017'
+#    ports:
+#      - '27017:27017'
 
   reports-server:
     build: 
