@@ -2,21 +2,15 @@ import Schedule from '../models/schedules';
 import { format } from 'date-fns';
 import {
   supervisoryEmail,
-  latePmtEmail,
   submissionByFormEmail,
-  smsIndicatorEmail,
 } from '../services/mailService';
 
 const checkForReports = async (report, emails) => {
   switch (report) {
     case 'Supervisory Report':
       return await supervisoryEmail(emails);
-    case 'SMS Reports':
-      return await smsIndicatorEmail(emails);
     case 'Submissions By Form':
       return await submissionByFormEmail(emails);
-    case 'Late PMT':
-      return await latePmtEmail(emails);
     default:
       return;
   }

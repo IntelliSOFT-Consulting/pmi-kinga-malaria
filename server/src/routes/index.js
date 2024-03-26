@@ -9,10 +9,7 @@ import {
 } from '../services/formsService';
 import { config } from 'dotenv';
 import * as formController from '../controllers/formController';
-import * as pmtReportController from '../controllers/pmtReportController';
-import orgUnitRoutes from './orgUnitRoutes';
 import userRoutes from './userRoutes';
-import pmtRoutes from './pmtRoutes';
 import reportRoutes from './reportRoutes';
 import scheduleRoutes from './scheduleRoutes';
 
@@ -48,11 +45,7 @@ router.get(
   formController.submissionByForm
 );
 
-router.get('/pmt-report', pmtReportController.getPmtReport);
-
-router.use('/org-units', orgUnitRoutes);
 router.use('/users', userRoutes);
-router.use('/pmt', pmtRoutes);
 router.use('/reports', reportRoutes);
 router.use('/schedules', scheduleRoutes);
 

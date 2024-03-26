@@ -1,6 +1,5 @@
 import Schedule from "../models/schedules";
 import MailList from "../models/mailList";
-import { updateRecipients } from "../services/scheduleService";
 
 const newschedules = [
   {

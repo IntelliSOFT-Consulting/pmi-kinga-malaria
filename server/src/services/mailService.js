@@ -4,8 +4,6 @@ import { config } from 'dotenv';
 import XLSX from 'xlsx';
 import sendEmail from '../lib/mail';
 import { login } from './authService';
-import { getReports, latePmtReport } from './pmtReportService';
-import Report from '../models/reports';
 
 config();
 
@@ -56,75 +54,6 @@ export const supervisoryEmail = async recipients => {
   }
 };
 
-export const latePmtEmail = async recipients => {
-  try {
-    // check if the report has been sent today
-    const today = format(new Date(), 'yyyy-MM-dd');
-    const reportsList = await Report.find({
-      date: {
-        $gte: new Date(today),
-      },
-      test_yn: 'no',
-    });
-
-    if (!reportsList.length) return;
-
-    const report = await latePmtReport(reportsList, today);
-
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(report);
-    XLSX.utils.book_append_sheet(wb, ws, 'Late PMT');
-    const xlsx = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-
-    const attachments = [createAttachment(xlsx, 'late_pmt')];
-
-    const body = `Please find attached the Late PMT report for ${today}`;
-
-    const title = `Late PMT Report for ${today}`;
-
-    await sendEmail(recipients, title, body, attachments);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const pmtEmail = async recipients => {
-  try {
-    const email = process.env.CENTRAL_EMAIL;
-    const password = process.env.CENTRAL_PASSWORD;
-
-    const token = await login({ email, password });
-    const report = await pmtReport(
-      'no',
-      token,
-      format(new Date(), 'yyyy-MM-dd'),
-      format(new Date(), 'yyyy-MM-dd')
-    );
-
-    if (report.length === 0) {
-      return;
-    }
-
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(report);
-    XLSX.utils.book_append_sheet(wb, ws, 'PMT');
-    const xlsx = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-
-    const attachments = [createAttachment(xlsx, 'pmt')];
-
-    const body = `Please find attached the PMT report for ${format(
-      new Date(),
-      'yyyy-MM-dd'
-    )}`;
-
-    const title = `PMT Report for ${format(new Date(), 'yyyy-MM-dd')}`;
-
-    await sendEmail(recipients, title, body, attachments);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const submissionByFormEmail = async recipients => {
   try {
     const email = process.env.CENTRAL_EMAIL;
@@ -165,45 +94,6 @@ export const submissionByFormEmail = async recipients => {
       lastMonday(),
       'yyyy-MM-dd'
     )} to ${format(new Date(), 'yyyy-MM-dd')}`;
-
-    await sendEmail(recipients, title, body, attachments);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const smsIndicatorEmail = async recipients => {
-  try {
-    const report = await getReports(
-      'no',
-      format(new Date(), 'yyyy-MM-dd'),
-      format(new Date(), 'yyyy-MM-dd')
-    );
-
-    if (report.length === 0) return;
-
-    const wb = XLSX.utils.book_new();
-    report.forEach(sheet => {
-      const ws = XLSX.utils.json_to_sheet(sheet.content, {
-        header: sheet.columns,
-      });
-      XLSX.utils.book_append_sheet(wb, ws, sheet.sheet);
-    });
-
-    const xlsxBase64 = XLSX.write(wb, {
-      type: 'buffer',
-      bookType: 'xlsx',
-    });
-
-    const attachments = [createAttachment(xlsxBase64, 'sms_indicator')];
-    const body = `Please find attached the Spray Progress Report for ${format(
-      new Date(),
-      'yyyy-MM-dd'
-    )}`;
-    const title = `SMS Indicator Report for ${format(
-      new Date(),
-      'yyyy-MM-dd'
-    )}`;
 
     await sendEmail(recipients, title, body, attachments);
   } catch (error) {
